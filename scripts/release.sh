@@ -3,7 +3,7 @@
 set -eo pipefail
 
 if ! which goreleaser >/dev/null ; then
-    go install github.com/goreleaser/goreleaser@v1.9.2
+    go install github.com/goreleaser/goreleaser@v1.14.1
 fi
 
 # Check configuration

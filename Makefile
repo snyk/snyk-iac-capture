@@ -1,4 +1,6 @@
-.PHONY: build release test
+.PHONY: build tag release test lint
+
+GOLANG_CI_LINT_VERSION=v1.50.1
 
 build:
 	./scripts/build.sh
@@ -11,3 +13,7 @@ release:
 
 test:
 	go test ./...
+
+lint:
+	@which golangci-lint > /dev/null 2>&1 || (curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | bash -s -- -b "$(go env GOPATH)/bin" "$(GOLANG_CI_LINT_VERSION)")
+	golangci-lint run -v --timeout=10m
