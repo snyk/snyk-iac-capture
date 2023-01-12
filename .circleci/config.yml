@@ -1,0 +1,187 @@
+version: 2.1
+
+orbs:
+  snyk: snyk/snyk@1.4.0
+
+executors:
+  default:
+    docker:
+      - image: cimg/go:1.19.4
+
+commands:
+  run-with-go-cache:
+    parameters:
+      tag:
+        type: string
+      steps:
+        type: steps
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+            - go-mod-v1-<< parameters.tag >>-{{ checksum "go.mod" }}-{{ checksum "go.sum" }}
+      - steps: << parameters.steps >>
+      - save_cache:
+          key: go-mod-v1-<< parameters.tag >>-{{ checksum "go.mod" }}-{{ checksum "go.sum" }}
+          when: always
+          paths:
+            - ~/go/pkg/mod
+            - ~/.cache/go-build
+
+jobs:
+  tidy:
+    executor: default
+    steps:
+      - run-with-go-cache:
+          tag: tidy
+          steps:
+            - run:
+                name: Check that go.mod is tidy
+                command: go mod tidy && git diff --exit-code go.mod go.sum
+
+  format:
+    executor: default
+    steps:
+      - run-with-go-cache:
+          tag: format
+          steps:
+            - run:
+                name: Check formatting
+                command: test -z $(go fmt ./...)
+
+  build:
+    executor: default
+    steps:
+      - run-with-go-cache:
+          tag: build
+          steps:
+            - run:
+                name: Build
+                command: go build ./...
+
+  test:
+    executor: default
+    steps:
+      - run-with-go-cache:
+          tag: test
+          steps:
+            - run:
+                name: Test
+                command: make test
+
+  lint:
+    executor: default
+    steps:
+      - run-with-go-cache:
+          tag: lint
+          steps:
+            - run:
+                name: Run golangci-lint
+                command: make lint
+
+  snyk-oss:
+    executor: default
+    steps:
+      - run-with-go-cache:
+          tag: snyk-oss
+          steps:
+            - snyk/scan:
+                severity-threshold: high
+                monitor-on-build: true
+                project: ${CIRCLE_PROJECT_REPONAME}
+                organization: snyk-iac-group-seceng
+
+  snyk-code:
+    executor: default
+    steps:
+      - run-with-go-cache:
+          tag: snyk-code
+          steps:
+            - snyk/scan:
+                command: code test
+                severity-threshold: high
+                monitor-on-build: false
+                project: ${CIRCLE_PROJECT_REPONAME}
+                organization: snyk-iac-group-seceng
+
+  release:
+    executor: default
+    steps:
+      - run-with-go-cache:
+          tag: release
+          steps:
+            - run:
+                name: Push new tag to GitHub
+                command: make tag
+            - run:
+                name: Release binaries to GitHub
+                command: make release
+
+workflows:
+  version: 2
+  ci:
+    unless:
+      equal: [ <<pipeline.git.branch>>, main ]
+    jobs:
+      - tidy:
+          name: Tidy
+          context: snyk-iac-capture
+      - format:
+          name: Format
+          context: snyk-iac-capture
+      - build:
+          name: Build
+          context: snyk-iac-capture
+      - test:
+          name: Test
+          context: snyk-iac-capture
+      - lint:
+          name: Lint
+          context: snyk-iac-capture
+      - snyk-oss:
+          name: Snyk Open Source
+          context: snyk-iac-capture
+      - snyk-code:
+          name: Snyk Code
+          context: snyk-iac-capture
+  release:
+    when:
+      equal: [ <<pipeline.git.branch>>, main ]
+    jobs:
+      - tidy:
+          name: Tidy
+          context: snyk-iac-capture
+      - format:
+          name: Format
+          context: snyk-iac-capture
+      - build:
+          name: Build
+          context: snyk-iac-capture
+      - test:
+          name: Test
+          context: snyk-iac-capture
+      - lint:
+          name: Lint
+          context: snyk-iac-capture
+      - snyk-oss:
+          name: Snyk Open Source
+          context: snyk-iac-capture
+      - snyk-code:
+          name: Snyk Code
+          context: snyk-iac-capture
+      - hold:
+          name: Approve release
+          type: approval
+          requires:
+            - Tidy
+            - Format
+            - Build
+            - Test
+            - Lint
+            - Snyk Open Source
+            - Snyk Code
+      - release:
+          name: Release
+          context: snyk-iac-capture
+          requires:
+            - Approve release
