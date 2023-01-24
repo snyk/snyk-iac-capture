@@ -11,20 +11,19 @@ type Command struct {
 }
 
 func (c Command) Run() int {
-	// read statefile
-	stateReader := reader.NewStateReader(c.StateFile)
-	tfState, err := stateReader.Read()
+	// read state file
+	tfState, err := reader.ReadState(c.StateFile)
 	if err != nil {
 		return 1
 	}
 
 	// call filter
-	_, err = filtering.Filter(tfState)
+	stateArtifact, err := filtering.FilterState(tfState)
 	if err != nil {
 		return 1
 	}
 
-	// send to cloud-api-service
-
+	// TODO send to cloud-api-service
+	_ = stateArtifact
 	return 0
 }

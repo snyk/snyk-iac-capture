@@ -17,8 +17,8 @@ type State struct {
 // UnmarshalJSON Custom deserializer to Throw error when a field not marked as omitempty is missing
 func (s *State) UnmarshalJSON(bytes []byte) error {
 	type tfState State
-	err := json.Unmarshal(bytes, (*tfState)(s))
-	if err != nil {
+
+	if err := json.Unmarshal(bytes, (*tfState)(s)); err != nil {
 		return err
 	}
 
@@ -35,6 +35,7 @@ func (s *State) UnmarshalJSON(bytes []byte) error {
 }
 
 type Resource struct {
+	Module    *string            `json:"module,omitempty"`
 	Mode      string             `json:"mode"`
 	Type      string             `json:"type"`
 	Name      string             `json:"name"`
