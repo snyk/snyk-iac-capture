@@ -19,14 +19,17 @@ func main() {
 	}
 
 	var (
-		org string
+		org       string
+		stateFile string
 	)
 
 	flag.StringVar(&org, "org", "", "Override the default organization")
+	flag.StringVar(&stateFile, "tfstate", "", "Path to look for the tfstate file")
 	flag.Parse()
 
 	cmd := snyk_iac_capture.Command{
-		Org: org,
+		Org:       org,
+		StateFile: stateFile,
 	}
 
 	os.Exit(cmd.Run())
