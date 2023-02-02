@@ -19,7 +19,7 @@ type Data struct {
 	Type       string          `json:"type"`
 }
 
-func (c *Client) UploadTFStateArtifact(ctx context.Context, orgID string, artifact *terraform.State) (e error) {
+func (c *Client) UploadTFStateArtifact(ctx context.Context, artifact *terraform.State) (e error) {
 	request := UploadTFStateArtifactRequest{
 		Data: Data{
 			Attributes: *artifact,
@@ -32,7 +32,7 @@ func (c *Client) UploadTFStateArtifact(ctx context.Context, orgID string, artifa
 		return err
 	}
 
-	url := fmt.Sprintf("%s/hidden/orgs/%s/cloud/mappings_artifact/tfstate", c.url, orgID)
+	url := fmt.Sprintf("%s/hidden/orgs/%s/cloud/mappings_artifact/tfstate", c.url, c.organisationID)
 
 	req, err := http.NewRequestWithContext(ctx, http.MethodPost, url, &body)
 	if err != nil {
