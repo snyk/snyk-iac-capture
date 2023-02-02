@@ -81,13 +81,18 @@ jobs:
 
   snyk-oss:
     executor: default
+    parameters:
+      run-monitor:
+        description: run snyk monitor if true
+        type: boolean
+        default: false
     steps:
       - run-with-go-cache:
           tag: snyk-oss
           steps:
             - snyk/scan:
                 severity-threshold: high
-                monitor-on-build: true
+                monitor-on-build: << parameters.run-monitor >>
                 project: ${CIRCLE_PROJECT_REPONAME}
                 organization: snyk-iac-group-seceng
 
@@ -166,6 +171,7 @@ workflows:
       - snyk-oss:
           name: Snyk Open Source
           context: snyk-iac-capture
+          run-monitor: true
       - snyk-code:
           name: Snyk Code
           context: snyk-iac-capture
