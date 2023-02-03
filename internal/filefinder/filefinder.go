@@ -17,18 +17,18 @@ func FindFiles(p, endPattern string) ([]string, error) {
 	if hasMeta(p) {
 		files, err = glob(p)
 		if err != nil {
-			return nil, fmt.Errorf("unable to find state in pattern ''%s: %+v", p, err)
+			return nil, fmt.Errorf("unable to find state in pattern '%s': %+v", p, err)
 		}
 	} else {
 		fileInfo, err := os.Stat(p)
 		if err != nil {
-			return nil, fmt.Errorf("'%s' p does not exists: %+v", p, err)
+			return nil, fmt.Errorf("'%s' path does not exist: %+v", p, err)
 		}
 
 		if fileInfo.IsDir() {
 			files, err = glob(path.Join(p, endPattern))
 			if err != nil {
-				return nil, fmt.Errorf("unable to find state in p ''%s: %+v", p, err)
+				return nil, fmt.Errorf("unable to find state in path '%s': %+v", p, err)
 			}
 		}
 	}

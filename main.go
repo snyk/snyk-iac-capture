@@ -18,12 +18,12 @@ var (
 )
 
 func main() {
-	flag.Bool("debug", false, "Override the default organization")
-	flag.String("org", "", "Organization public id")
-	flag.String("path", "", "Path to look for the terraform state files (can be a file, a directory or a glob pattern)")
+	flag.BoolP("debug", "d", false, "Show debug information")
 	flag.Bool("http-tls-skip-verify", false, "If set, skip client validation of TLS certificates")
-	flag.String("api-rest-url", "", "Path to look for the tfstate file")
-	flag.String("api-rest-token", "api-rest-token", "Path to look for the tfstate file")
+	flag.String("api-rest-url", "https://api.snyk.io", "Url for Snyk REST API")
+	flag.String("path", ".", "Path to look for Terraform state files (can be a file, a directory or a glob pattern)")
+	flag.String("api-rest-token", "", "Auth token for the API Usage (Required)")
+	flag.String("org", "", "Organization public id (Required)")
 	flag.Parse()
 
 	// normalize flag with - in the name to make it easier to match with env
@@ -36,33 +36,20 @@ func main() {
 	})
 
 	viper.SetEnvPrefix("SNYK_IAC_CAPTURE")
-	if err := viper.BindPFlags(flag.CommandLine); err != nil {
-		panic(err)
-	}
-	if err := viper.BindEnv("debug"); err != nil {
-		panic(err)
-	}
-	if err := viper.BindEnv("org"); err != nil {
-		panic(err)
-	}
-	if err := viper.BindEnv("path"); err != nil {
-		panic(err)
-	}
-	if err := viper.BindEnv("http_tls_skip_verify"); err != nil {
-		panic(err)
-	}
-	if err := viper.BindEnv("api_rest_url"); err != nil {
-		panic(err)
-	}
-	if err := viper.BindEnv("api_rest_token"); err != nil {
-		panic(err)
-	}
+	must(viper.BindPFlags(flag.CommandLine))
+	must(viper.BindEnv("debug"))
+	must(viper.BindEnv("org"))
+	must(viper.BindEnv("path"))
+	must(viper.BindEnv("http_tls_skip_verify"))
+	must(viper.BindEnv("api_rest_url"))
+	must(viper.BindEnv("api_rest_token"))
 
 	logrus.SetLevel(logrus.WarnLevel)
-	if (version != "" && commit != "") || viper.GetBool("debug") {
+	if viper.GetBool("debug") {
 		logrus.SetLevel(logrus.DebugLevel)
-		logrus.Debugf("snyk-iac-capture %s (%s)", version, commit)
 	}
+	logrus.Debugf("snyk-iac-capture %s (%s)", version, commit)
+
 	command := capture.Command{
 		Org:               viper.GetString("org"),
 		StatePath:         viper.GetString("path"),
@@ -73,4 +60,10 @@ func main() {
 	}
 
 	os.Exit(command.Run())
+}
+
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
 }

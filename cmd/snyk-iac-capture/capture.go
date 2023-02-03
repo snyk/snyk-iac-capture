@@ -3,6 +3,7 @@ package snyk_iac_capture
 import (
 	"context"
 	"fmt"
+	"path"
 
 	"github.com/sirupsen/logrus"
 
@@ -23,22 +24,25 @@ type Command struct {
 }
 
 func (c *Command) Run() int {
-	if err := c.capture(); err != nil {
+	captured, err := c.capture()
+	fmt.Printf("Captured Terraform states: %+v\n", captured)
+
+	if err != nil {
 		fmt.Printf("An error occured: %+v\n", err)
 		return 1
 	}
-	fmt.Println("Successfully captured your states.")
+	fmt.Println("Successfully captured all your states.")
 	return 0
 }
 
-func (c *Command) capture() error {
-	logrus.Debugf("Looking for terraform states in '%s'", c.StatePath)
-	files, err := filefinder.FindFiles(c.StatePath, "**/*.tfstate")
+func (c *Command) capture() ([]string, error) {
+	logrus.Debugf("Looking for Terraform states in '%s'", c.StatePath)
+	files, err := filefinder.FindFiles(c.StatePath, path.Join("**", "*.tfstate"))
 	if err != nil {
-		return fmt.Errorf("error looking for terraform state in '%s': %v", c.StatePath, err)
+		return nil, fmt.Errorf("error looking for Terraform states in '%s': %v", c.StatePath, err)
 	}
 	if len(files) <= 0 {
-		return fmt.Errorf("could not find any terraform state in '%s'", c.StatePath)
+		return nil, fmt.Errorf("could not find any Terraform state in '%s'", c.StatePath)
 	}
 	logrus.Debugf("Found %+v\n", files)
 
@@ -47,7 +51,7 @@ func (c *Command) capture() error {
 		http.WithExtraCertificates(c.ExtraSSlCerts),
 	)
 	if err != nil {
-		return fmt.Errorf("error creating HTTP client: %v", err)
+		return nil, fmt.Errorf("error creating HTTP client: %v", err)
 	}
 	cloudApiClient, err := cloudapi.NewClient(cloudapi.ClientConfig{
 		HTTPClient:     httpClient,
@@ -57,31 +61,33 @@ func (c *Command) capture() error {
 		OrganisationID: c.Org,
 	})
 	if err != nil {
-		return fmt.Errorf("error creating CloudAPI client: %v", err)
+		return nil, fmt.Errorf("error creating CloudAPI client: %v", err)
 	}
 
+	var captured []string
 	for _, file := range files {
 		logrus.Debugf("Capturing '%s'", file)
 		err := captureState(file, cloudApiClient)
 		if err != nil {
-			return err
+			return nil, err
 		}
+		captured = append(captured, file)
 	}
 
-	return nil
+	return captured, nil
 }
 
 func captureState(statePath string, cloudApiClient *cloudapi.Client) error {
 	// read state file
 	tfState, err := reader.ReadState(statePath)
 	if err != nil {
-		return fmt.Errorf("error reading terraform state %s: %v", statePath, err)
+		return fmt.Errorf("error reading Terraform state %s: %v", statePath, err)
 	}
 
 	// call filter
 	stateArtifact, err := filtering.FilterState(tfState)
 	if err != nil {
-		return fmt.Errorf("error filtering terraform state %s: %v", statePath, err)
+		return fmt.Errorf("error filtering Terraform state %s: %v", statePath, err)
 	}
 
 	// send artifact to cloud api
