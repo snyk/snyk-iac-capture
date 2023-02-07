@@ -10,7 +10,7 @@ fi
 goreleaser check
 
 FLAGS=""
-FLAGS+="--rm-dist --parallelism 2"
+FLAGS+="--rm-dist --parallelism 2 "
 
 # Only CI system should publish artifacts
 if [ "$CI" != true ]; then
