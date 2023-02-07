@@ -11,17 +11,19 @@ type HTTPClient interface {
 }
 
 type ClientConfig struct {
-	HTTPClient    HTTPClient
-	URL           string
-	Authorization string
-	Version       string
+	HTTPClient     HTTPClient
+	URL            string
+	Authorization  string
+	Version        string
+	OrganisationID string
 }
 
 type Client struct {
-	httpClient    HTTPClient
-	url           string
-	authorization string
-	version       string
+	httpClient     HTTPClient
+	url            string
+	authorization  string
+	version        string
+	organisationID string
 }
 
 func NewClient(config ClientConfig) (*Client, error) {
@@ -43,6 +45,10 @@ func NewClient(config ClientConfig) (*Client, error) {
 		return nil, fmt.Errorf("no version provided")
 	}
 
+	if config.OrganisationID == "" {
+		return nil, fmt.Errorf("no organisation id provided")
+	}
+
 	parsedURL, err := url.Parse(config.URL)
 	if err != nil {
 		return nil, fmt.Errorf("invalid URL: %v", err)
@@ -54,10 +60,11 @@ func NewClient(config ClientConfig) (*Client, error) {
 	}
 
 	client := Client{
-		httpClient:    httpClient,
-		url:           sanitizedURL.String(),
-		authorization: config.Authorization,
-		version:       config.Version,
+		httpClient:     httpClient,
+		url:            sanitizedURL.String(),
+		authorization:  config.Authorization,
+		version:        config.Version,
+		organisationID: config.OrganisationID,
 	}
 
 	return &client, nil

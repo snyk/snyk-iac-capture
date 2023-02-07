@@ -1,0 +1,10 @@
+# Snyk (https://snyk.io) policy file, patches or ignores known vulnerabilities.
+version: v1.25.0
+# ignores vulnerabilities until expiry date; change duration by modifying expiry date
+ignore:
+  'snyk:lic:golang:github.com:hashicorp:hcl:MPL-2.0':
+    - '*':
+        reason: This is an indirect dependency from viper
+        expires: 2024-03-04T14:33:22.577Z
+        created: 2023-02-02T14:33:22.579Z
+patch: {}
