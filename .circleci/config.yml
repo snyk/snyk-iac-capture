@@ -17,6 +17,9 @@ commands:
         type: steps
     steps:
       - checkout
+      - add_ssh_keys:
+          fingerprints:
+            - "13:48:8d:8e:35:19:6d:a2:2b:a4:57:4e:b9:3e:ab:a0"
       - restore_cache:
           keys:
             - go-mod-v1-<< parameters.tag >>-{{ checksum "go.mod" }}-{{ checksum "go.sum" }}
