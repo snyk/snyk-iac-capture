@@ -19,7 +19,7 @@ var (
 
 func main() {
 	flag.BoolP("debug", "d", false, "Show debug information")
-	flag.Bool("http-tls-skip-verify", false, "If set, skip client validation of TLS certificates")
+	//flag.Bool("http-tls-skip-verify", false, "If set, skip client validation of TLS certificates") Disabled for the closed beta
 	flag.String("api-rest-url", "https://api.snyk.io", "Url for Snyk REST API")
 	flag.String("path", ".", "Path to look for Terraform state files (can be a file, a directory or a glob pattern)")
 	flag.String("api-rest-token", "", "Auth token for the API Usage (Required)")
