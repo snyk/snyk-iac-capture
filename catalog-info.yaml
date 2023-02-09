@@ -1,0 +1,22 @@
+# Documentation: https://www.notion.so/snyk/Entity-Metadata-1e313ca03f954a6680b2b6b7b3d95297
+# Validation Tool: https://github.com/snyk/prodsec-github-bot
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+    name: snyk-iac-capture
+    annotations:
+        github.com/project-slug: snyk/snyk-iac-capture
+        circleci.com/project-slug: github/snyk/snyk-iac-capture
+    description: <
+        A Golang CLI that sends state artifact to Snyk's Cloud API to find mappings between Cloud and IaC resources.
+    labels:
+        snyk.io/businessCriticality: medium
+        snyk.io/visibility: private
+        snyk.io/metadata-version: "2022-23-01"
+spec:
+    # Currently type only accepts one of, website, service, library and we've aligned
+    # internally on "service" for CLI tools.
+    # See: https://backstage.io/docs/features/software-catalog/descriptor-format#spectype-required
+    type: service
+    lifecycle: production
+    owner: "cloud-context"
