@@ -97,7 +97,7 @@ jobs:
                 severity-threshold: high
                 monitor-on-build: << parameters.run-monitor >>
                 project: ${CIRCLE_PROJECT_REPONAME}
-                organization: snyk-iac-group-seceng
+                organization: cloud-cloud
 
   snyk-code:
     executor: default
@@ -110,7 +110,7 @@ jobs:
                 severity-threshold: high
                 monitor-on-build: false
                 project: ${CIRCLE_PROJECT_REPONAME}
-                organization: snyk-iac-group-seceng
+                organization: cloud-cloud
 
   release:
     executor: default
