@@ -29,24 +29,20 @@ type Client struct {
 func NewClient(config ClientConfig) (*Client, error) {
 	httpClient := config.HTTPClient
 
-	if httpClient == nil {
+	/*if httpClient == nil {
 		httpClient = http.DefaultClient
-	}
+	}*/
 
 	if config.URL == "" {
 		return nil, fmt.Errorf("no URL provided")
 	}
 
 	if config.Authorization == "" {
-		return nil, fmt.Errorf("no token provided")
+		return nil, fmt.Errorf("no Authorization provided")
 	}
 
 	if config.Version == "" {
 		return nil, fmt.Errorf("no version provided")
-	}
-
-	if config.OrganisationID == "" {
-		return nil, fmt.Errorf("no organisation id provided")
 	}
 
 	parsedURL, err := url.Parse(config.URL)

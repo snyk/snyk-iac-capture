@@ -34,7 +34,7 @@ func TestReadState(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			tfState, err := ReadState(tt.path)
+			tfState, err := ReadStateFile(tt.path)
 
 			if tt.wantErr {
 				assert.NotNil(t, err)

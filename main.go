@@ -1,10 +1,11 @@
 package main
 
 import (
+	"io"
+	"log"
 	"os"
 	"strings"
 
-	"github.com/sirupsen/logrus"
 	"github.com/spf13/pflag"
 	flag "github.com/spf13/pflag"
 	"github.com/spf13/viper"
@@ -24,6 +25,7 @@ func main() {
 	flag.String("path", ".", "Path to look for Terraform state files (can be a file, a directory or a glob pattern)")
 	flag.String("api-rest-token", "", "Auth token for the API Usage (Required)")
 	flag.String("org", "", "Organization public id (Required)")
+	flag.Bool("stdin", false, "Read Terraform state from the standard input instead of path")
 	flag.Parse()
 
 	// normalize flag with - in the name to make it easier to match with env
@@ -43,20 +45,26 @@ func main() {
 	must(viper.BindEnv("http_tls_skip_verify"))
 	must(viper.BindEnv("api_rest_url"))
 	must(viper.BindEnv("api_rest_token"))
+	must(viper.BindEnv("stdin"))
 
-	logrus.SetLevel(logrus.WarnLevel)
-	if viper.GetBool("debug") {
-		logrus.SetLevel(logrus.DebugLevel)
+	logger := log.New(os.Stderr, "", 0)
+
+	debug := viper.GetBool("debug")
+	if !debug {
+		logger.SetOutput(io.Discard)
 	}
-	logrus.Debugf("snyk-iac-capture %s (%s)", version, commit)
+
+	logger.Printf("snyk-iac-capture %s (%s)\n", version, commit)
 
 	command := capture.Command{
+		Logger:            logger,
 		Org:               viper.GetString("org"),
 		StatePath:         viper.GetString("path"),
 		HTTPTLSSkipVerify: viper.GetBool("http_tls_skip_verify"),
 		APIURL:            viper.GetString("api_rest_url"),
 		APIToken:          viper.GetString("api_rest_token"),
 		ExtraSSlCerts:     os.Getenv("NODE_EXTRA_CA_CERTS"), // we still want to read this one without prefix to work with snyk node cli integration
+		StateFromStdin:    viper.GetBool("stdin"),
 	}
 
 	os.Exit(command.Run())

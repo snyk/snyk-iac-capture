@@ -44,7 +44,9 @@ func (c *Client) UploadTFStateArtifact(ctx context.Context, artifact *terraform.
 	req.URL.RawQuery = query.Encode()
 
 	req.Header.Set("Content-Type", "application/vnd.api+json")
-	req.Header.Set("Authorization", c.authorization)
+	if c.authorization != "" {
+		req.Header.Set("Authorization", c.authorization)
+	}
 
 	res, err := c.httpClient.Do(req)
 	if err != nil {
