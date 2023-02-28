@@ -37,21 +37,17 @@ func NewClient(config ClientConfig) (*Client, error) {
 		return nil, fmt.Errorf("no URL provided")
 	}
 
-	if config.Authorization == "" {
-		return nil, fmt.Errorf("no token provided")
+	if config.OrganisationID == "" {
+		return nil, fmt.Errorf("no OrganisationID provided")
 	}
 
 	if config.Version == "" {
 		return nil, fmt.Errorf("no version provided")
 	}
 
-	if config.OrganisationID == "" {
-		return nil, fmt.Errorf("no organisation id provided")
-	}
-
 	parsedURL, err := url.Parse(config.URL)
 	if err != nil {
-		return nil, fmt.Errorf("invalid URL: %v", err)
+		return nil, fmt.Errorf("invalid URL: %w", err)
 	}
 
 	sanitizedURL := url.URL{

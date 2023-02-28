@@ -1,22 +1,19 @@
 package snyk_iac_capture
 
 import (
-	"context"
 	"fmt"
-	"path"
-
-	"github.com/sirupsen/logrus"
+	"log"
 
 	"github.com/snyk/snyk-iac-capture/internal/cloudapi"
-	"github.com/snyk/snyk-iac-capture/internal/filefinder"
-	"github.com/snyk/snyk-iac-capture/internal/filtering"
 	"github.com/snyk/snyk-iac-capture/internal/http"
-	"github.com/snyk/snyk-iac-capture/internal/reader"
+	"github.com/snyk/snyk-iac-capture/pkg/capture"
 )
 
 type Command struct {
+	Logger            *log.Logger
 	Org               string
 	StatePath         string
+	StateFromStdin    bool
 	HTTPTLSSkipVerify bool
 	APIURL            string
 	APIToken          string
@@ -36,23 +33,16 @@ func (c *Command) Run() int {
 }
 
 func (c *Command) capture() ([]string, error) {
-	logrus.Debugf("Looking for Terraform states in '%s'", c.StatePath)
-	files, err := filefinder.FindFiles(c.StatePath, path.Join("**", "*.tfstate"))
-	if err != nil {
-		return nil, fmt.Errorf("error looking for Terraform states in '%s': %v", c.StatePath, err)
-	}
-	if len(files) <= 0 {
-		return nil, fmt.Errorf("could not find any Terraform state in '%s'", c.StatePath)
-	}
-	logrus.Debugf("Found %+v\n", files)
-
+	c.Logger.Println("Start capturing...")
 	httpClient, err := http.NewClient(
 		http.WithTLSSkipVerify(c.HTTPTLSSkipVerify),
 		http.WithExtraCertificates(c.ExtraSSlCerts),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("error creating HTTP client: %v", err)
+		return nil, fmt.Errorf("error creating HTTP client: %w", err)
 	}
+	c.Logger.Println("Http Client created...")
+
 	cloudApiClient, err := cloudapi.NewClient(cloudapi.ClientConfig{
 		HTTPClient:     httpClient,
 		URL:            c.APIURL,
@@ -61,39 +51,13 @@ func (c *Command) capture() ([]string, error) {
 		OrganisationID: c.Org,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("error creating CloudAPI client: %v", err)
+		return nil, fmt.Errorf("error creating CloudAPI client: %w", err)
+	}
+	c.Logger.Println("CloudApiClient created...")
+
+	if !c.StateFromStdin {
+		return capture.CaptureStatesFromPath(c.StatePath, cloudApiClient, c.Logger)
 	}
 
-	var captured []string
-	for _, file := range files {
-		logrus.Debugf("Capturing '%s'", file)
-		err := captureState(file, cloudApiClient)
-		if err != nil {
-			return nil, err
-		}
-		captured = append(captured, file)
-	}
-
-	return captured, nil
-}
-
-func captureState(statePath string, cloudApiClient *cloudapi.Client) error {
-	// read state file
-	tfState, err := reader.ReadState(statePath)
-	if err != nil {
-		return fmt.Errorf("error reading Terraform state %s: %v", statePath, err)
-	}
-
-	// call filter
-	stateArtifact, err := filtering.FilterState(tfState)
-	if err != nil {
-		return fmt.Errorf("error filtering Terraform state %s: %v", statePath, err)
-	}
-
-	// send artifact to cloud api
-	err = cloudApiClient.UploadTFStateArtifact(context.TODO(), stateArtifact)
-	if err != nil {
-		return fmt.Errorf("error uploading state artifact for '%s': %v", statePath, err)
-	}
-	return nil
+	return capture.CaptureStateFromStdin(cloudApiClient, c.Logger)
 }
