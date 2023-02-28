@@ -60,7 +60,7 @@ func capture(statePath, apiUrl, token, org string, stateFromStdin bool, ictx wor
 		Authorization:  fmt.Sprintf("token %s", token), // TODO remove when the client is fixed
 	})
 	if err != nil {
-		return nil, fmt.Errorf("error creating CloudAPI client: %v", err)
+		return nil, fmt.Errorf("error creating CloudAPI client: %w", err)
 	}
 	logger.Println("CloudApiClient created...")
 

@@ -43,14 +43,14 @@ func NewClient(options ...Option) (*http.Client, error) {
 
 	pool, err := x509.SystemCertPool()
 	if err != nil {
-		return nil, fmt.Errorf("read system cert pool: %v", err)
+		return nil, fmt.Errorf("read system cert pool: %w", err)
 	}
 	if pool == nil {
 		pool = x509.NewCertPool()
 	}
 
 	if err := loadCertificates(pool, c.certificates); err != nil {
-		return nil, fmt.Errorf("load certificates: %v", err)
+		return nil, fmt.Errorf("load certificates: %w", err)
 	}
 
 	client := http.DefaultClient
@@ -68,7 +68,7 @@ func NewClient(options ...Option) (*http.Client, error) {
 func loadCertificates(pool *x509.CertPool, certificates []string) error {
 	for _, certificate := range certificates {
 		if err := loadCertificate(pool, certificate); err != nil {
-			return fmt.Errorf("load certificate %v: %v", certificate, err)
+			return fmt.Errorf("load certificate %v: %w", certificate, err)
 		}
 	}
 
@@ -81,7 +81,7 @@ func loadCertificate(pool *x509.CertPool, certPath string) error {
 		return nil
 	}
 	if err != nil {
-		return fmt.Errorf("read certificates: %v", err)
+		return fmt.Errorf("read certificates: %w", err)
 	}
 
 	if ok := pool.AppendCertsFromPEM(certData); !ok {

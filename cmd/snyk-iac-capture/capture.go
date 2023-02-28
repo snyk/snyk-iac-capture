@@ -6,7 +6,6 @@ import (
 
 	"github.com/snyk/snyk-iac-capture/internal/cloudapi"
 	"github.com/snyk/snyk-iac-capture/internal/http"
-	"github.com/snyk/snyk-iac-capture/internal/reader"
 	"github.com/snyk/snyk-iac-capture/pkg/capture"
 )
 
@@ -34,13 +33,13 @@ func (c *Command) Run() int {
 }
 
 func (c *Command) capture() ([]string, error) {
-	c.Logger.Println("Start capture...")
+	c.Logger.Println("Start capturing...")
 	httpClient, err := http.NewClient(
 		http.WithTLSSkipVerify(c.HTTPTLSSkipVerify),
 		http.WithExtraCertificates(c.ExtraSSlCerts),
 	)
 	if err != nil {
-		return nil, fmt.Errorf("error creating HTTP client: %v", err)
+		return nil, fmt.Errorf("error creating HTTP client: %w", err)
 	}
 	c.Logger.Println("Http Client created...")
 
@@ -52,7 +51,7 @@ func (c *Command) capture() ([]string, error) {
 		OrganisationID: c.Org,
 	})
 	if err != nil {
-		return nil, fmt.Errorf("error creating CloudAPI client: %v", err)
+		return nil, fmt.Errorf("error creating CloudAPI client: %w", err)
 	}
 	c.Logger.Println("CloudApiClient created...")
 
@@ -60,10 +59,5 @@ func (c *Command) capture() ([]string, error) {
 		return capture.CaptureStatesFromPath(c.StatePath, cloudApiClient, c.Logger)
 	}
 
-	c.Logger.Println("Reading state from stdin")
-	state, err := reader.ReadStateFromStdin()
-	if err != nil {
-		return nil, err
-	}
-	return []string{state.Lineage}, capture.CaptureState(state, cloudApiClient)
+	return capture.CaptureStateFromStdin(cloudApiClient, c.Logger)
 }
