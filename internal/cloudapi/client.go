@@ -50,14 +50,9 @@ func NewClient(config ClientConfig) (*Client, error) {
 		return nil, fmt.Errorf("invalid URL: %w", err)
 	}
 
-	sanitizedURL := url.URL{
-		Scheme: parsedURL.Scheme,
-		Host:   parsedURL.Host,
-	}
-
 	client := Client{
 		httpClient:     httpClient,
-		url:            sanitizedURL.String(),
+		url:            parsedURL.String(),
 		authorization:  config.Authorization,
 		version:        config.Version,
 		organisationID: config.OrganisationID,
