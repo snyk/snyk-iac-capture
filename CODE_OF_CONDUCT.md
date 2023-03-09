@@ -61,8 +61,8 @@ representative at an online or offline event.
 Instances of abusive, harassing, or otherwise unacceptable behavior may be
 reported to the community leaders responsible for enforcement at
 
-- `sharon.sitti <at> snyk.io`
-- `bastian.doetsch <at> snyk.io`
+- `karni <at> snyk.io`
+- `martin.guibert <at> snyk.io`
 - `daniel.appelquist <at> snyk.io`
 
 All complaints will be reviewed and investigated promptly and fairly.
