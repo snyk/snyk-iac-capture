@@ -10,4 +10,9 @@ ignore:
     - '*':
         reason: This is an indirect dependency from snyk/go-application-framework
         created: 2023-03-08T11:41:47.736Z
+  SNYK-GOLANG-GOLANGORGXNETHTTP2HPACK-3358253:
+    - '*':
+        reason: Waiting for snyk/go-application-framework to fix this issue
+        expires: 2023-04-09T16:03:55.392Z
+        created: 2023-03-10T16:03:55.398Z
 patch: {}
