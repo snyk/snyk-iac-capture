@@ -80,10 +80,8 @@ func CaptureStateFromStdin(cloudApiClient *cloudapi.Client, logger *log.Logger) 
 }
 
 func CaptureState(tfState *terraform.State, cloudApiClient *cloudapi.Client) error {
-	filterer := filtering.NewStateFilterer()
-
 	// call filter
-	stateArtifact, err := filterer.FilterState(tfState)
+	stateArtifact, err := filtering.FilterState(tfState)
 	if err != nil {
 		return fmt.Errorf("unable to filter: %w", err)
 	}

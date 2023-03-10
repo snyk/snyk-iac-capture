@@ -50,9 +50,7 @@ func TestFilter(t *testing.T) {
 			read, err := reader.ReadStateFile(filepath.Join("testdata/", tt.stateFile))
 			assert.Nil(t, err)
 
-			filterer := NewStateFilterer()
-
-			got, err := filterer.FilterState(read)
+			got, err := FilterState(read)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("FilterState() error = %v, wantErr %v", err, tt.wantErr)
 				return

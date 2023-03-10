@@ -16,17 +16,16 @@
 
 package filtering
 
-import "github.com/snyk/snyk-iac-capture/internal/filtering/resources"
-
 type ResourceAllowlist map[string][]string
 
-func NewResourceAllowlist() ResourceAllowlist {
-	return ResourceAllowlist{
-		resources.AWSSecurityGroupRule: resources.AWSSecurityGroupRuleAllowedAttributes,
-	}
+var globalAllowlist = ResourceAllowlist{
+	"aws_security_group_rule": []string{"security_group_id"},
 }
 
-func (w ResourceAllowlist) GetAllowedAttributes(ty string) ([]string, bool) {
-	mapper, ok := w[ty]
-	return mapper, ok
+func (a ResourceAllowlist) GetAllowedAttributes(ty string) []string {
+	allowedAttributes := []string{"id"}
+	if attributes, ok := a[ty]; ok {
+		allowedAttributes = append(allowedAttributes, attributes...)
+	}
+	return allowedAttributes
 }
