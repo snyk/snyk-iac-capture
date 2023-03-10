@@ -20,9 +20,17 @@ import (
 	"github.com/snyk/snyk-iac-capture/internal/terraform"
 )
 
-var globalWhitelistedAttributes = []string{"id"}
+type StateFilterer struct {
+	Allowlist ResourceAllowlist
+}
 
-func FilterState(state *terraform.State) (*terraform.State, error) {
+func NewStateFilterer() StateFilterer {
+	return StateFilterer{
+		Allowlist: NewResourceAllowlist(),
+	}
+}
+
+func (f StateFilterer) FilterState(state *terraform.State) (*terraform.State, error) {
 	artifact := terraform.State{
 		Version:          state.Version,
 		TerraformVersion: state.TerraformVersion,
@@ -33,10 +41,16 @@ func FilterState(state *terraform.State) (*terraform.State, error) {
 		if resource.Mode != "managed" {
 			continue
 		}
+
+		whitelistAttributes := []string{"id"}
+		if m, ok := f.Allowlist.GetAllowedAttributes(resource.Type); ok {
+			whitelistAttributes = append(whitelistAttributes, m...)
+		}
+
 		var instances []terraform.ResourceInstance
 		for _, instance := range resource.Instances {
 			attributes := map[string]interface{}{}
-			for _, attr := range globalWhitelistedAttributes {
+			for _, attr := range whitelistAttributes {
 				if _, exists := instance.Attributes[attr]; exists {
 					attributes[attr] = instance.Attributes[attr]
 				}
