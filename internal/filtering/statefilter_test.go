@@ -26,7 +26,6 @@ import (
 )
 
 func TestFilter(t *testing.T) {
-
 	tests := []struct {
 		name           string
 		stateFile      string
@@ -39,10 +38,15 @@ func TestFilter(t *testing.T) {
 			resultJsonFile: "full-filtered.json",
 			wantErr:        false,
 		},
+		{
+			name:           "Filter a state with security group rules",
+			stateFile:      "aws_security_group_rule.json",
+			resultJsonFile: "aws_security_group_rule-filtered.json",
+			wantErr:        false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-
 			read, err := reader.ReadStateFile(filepath.Join("testdata/", tt.stateFile))
 			assert.Nil(t, err)
 
