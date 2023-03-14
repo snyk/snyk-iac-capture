@@ -22,6 +22,8 @@ import (
 	"log"
 	"path"
 
+	"github.com/hashicorp/go-multierror"
+
 	"github.com/snyk/snyk-iac-capture/internal/cloudapi"
 	"github.com/snyk/snyk-iac-capture/internal/filefinder"
 	"github.com/snyk/snyk-iac-capture/internal/filtering"
@@ -46,15 +48,17 @@ func CaptureStatesFromPath(statePath string, cloudApiClient *cloudapi.Client, lo
 	logger.Printf("Found %+v\n", files)
 
 	var captured []string
+	var errors *multierror.Error
 	for _, file := range files {
 		logger.Printf("Capturing '%s'\n", file)
 		err := CaptureStateFromPath(file, cloudApiClient)
 		if err != nil {
-			return nil, err
+			errors = multierror.Append(errors, err)
+			continue
 		}
 		captured = append(captured, file)
 	}
-	return captured, nil
+	return captured, errors
 }
 
 func CaptureStateFromPath(statePath string, cloudApiClient *cloudapi.Client) error {
