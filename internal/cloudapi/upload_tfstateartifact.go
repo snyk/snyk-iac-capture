@@ -20,10 +20,15 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
 
 	"github.com/snyk/snyk-iac-capture/internal/terraform"
+)
+
+const (
+	MaxRequestBodySize = 2.5 * 1024 * 1024 // 2.5MB
 )
 
 type UploadTFStateArtifactRequest struct {
@@ -46,6 +51,9 @@ func (c *Client) UploadTFStateArtifact(ctx context.Context, artifact *terraform.
 	var body bytes.Buffer
 	if err := json.NewEncoder(&body).Encode(request); err != nil {
 		return err
+	}
+	if body.Len() > MaxRequestBodySize {
+		return errors.New("filtered state is bigger than the allowed maximum, skipping upload")
 	}
 
 	url := fmt.Sprintf("%s/hidden/orgs/%s/cloud/mappings_artifact/tfstate", c.url, c.organisationID)
