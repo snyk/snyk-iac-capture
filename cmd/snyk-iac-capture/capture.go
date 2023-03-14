@@ -41,7 +41,7 @@ func (c *Command) Run() int {
 	fmt.Printf("Captured Terraform states: %+v\n", captured)
 
 	if err != nil {
-		fmt.Printf("An error occured: %+v\n", err)
+		fmt.Printf("%+v", err)
 		return 1
 	}
 	fmt.Println("Successfully captured all your states.")
