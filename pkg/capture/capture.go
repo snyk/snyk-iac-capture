@@ -58,7 +58,8 @@ func CaptureStatesFromPath(statePath string, cloudApiClient *cloudapi.Client, lo
 		}
 		captured = append(captured, file)
 	}
-	return captured, errors
+
+	return captured, errors.ErrorOrNil()
 }
 
 func CaptureStateFromPath(statePath string, cloudApiClient *cloudapi.Client) error {
