@@ -44,6 +44,12 @@ func TestFilter(t *testing.T) {
 			resultJsonFile: "aws_security_group_rule-filtered.json",
 			wantErr:        false,
 		},
+		{
+			name:           "Filter a state with S3 bucket ACLs",
+			stateFile:      "aws_s3_bucket_acl.json",
+			resultJsonFile: "aws_s3_bucket_acl-filtered.json",
+			wantErr:        false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

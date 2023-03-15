@@ -1,0 +1,57 @@
+{
+    "version": 4,
+    "terraform_version": "1.1.9",
+    "resources": [
+      {
+        "mode": "managed",
+        "type": "aws_s3_bucket",
+        "name": "canonical",
+        "instances": [
+          {
+            "attributes": {
+              "id": "terraform-20230314154627317000000001"
+            }
+          }
+        ]
+      },
+      {
+        "mode": "managed",
+        "type": "aws_s3_bucket",
+        "name": "public-read",
+        "instances": [
+          {
+            "attributes": {
+              "id": "terraform-20230314154627318400000002"
+            }
+          }
+        ]
+      },
+      {
+        "mode": "managed",
+        "type": "aws_s3_bucket_acl",
+        "name": "canonical",
+        "instances": [
+          {
+            "attributes": {
+              "bucket": "terraform-20230314154627317000000001",
+              "id": "terraform-20230314154627317000000001"
+            }
+          }
+        ]
+      },
+      {
+        "mode": "managed",
+        "type": "aws_s3_bucket_acl",
+        "name": "public-read",
+        "instances": [
+          {
+            "attributes": {
+              "bucket": "terraform-20230314154627318400000002",
+              "id": "terraform-20230314154627318400000002,public-read"
+            }
+          }
+        ]
+      }
+    ],
+    "lineage": "23d50cf6-13d5-81aa-2fbb-ea0627fb8fe7"
+  }

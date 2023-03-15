@@ -20,6 +20,7 @@ type ResourceAllowlist map[string][]string
 
 var globalAllowlist = ResourceAllowlist{
 	"aws_security_group_rule": []string{"security_group_id"},
+	"aws_s3_bucket_acl":       []string{"bucket"},
 }
 
 func (a ResourceAllowlist) GetAllowedAttributes(ty string) []string {
