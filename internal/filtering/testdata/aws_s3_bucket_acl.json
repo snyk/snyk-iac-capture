@@ -1,0 +1,271 @@
+{
+    "version": 4,
+    "terraform_version": "1.1.9",
+    "serial": 61,
+    "lineage": "23d50cf6-13d5-81aa-2fbb-ea0627fb8fe7",
+    "outputs": {},
+    "resources": [
+      {
+        "mode": "data",
+        "type": "aws_canonical_user_id",
+        "name": "current",
+        "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+        "instances": [
+          {
+            "schema_version": 0,
+            "attributes": {
+              "display_name": "christof.dorner",
+              "id": "b9cf412bee08b69aa9f76584b19d74c72975c21976b0baa42ce6c79366c10955"
+            },
+            "sensitive_attributes": []
+          }
+        ]
+      },
+      {
+        "mode": "managed",
+        "type": "aws_s3_bucket",
+        "name": "canonical",
+        "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+        "instances": [
+          {
+            "schema_version": 0,
+            "attributes": {
+              "acceleration_status": "",
+              "acl": null,
+              "arn": "arn:aws:s3:::terraform-20230314154627317000000001",
+              "bucket": "terraform-20230314154627317000000001",
+              "bucket_domain_name": "terraform-20230314154627317000000001.s3.amazonaws.com",
+              "bucket_prefix": null,
+              "bucket_regional_domain_name": "terraform-20230314154627317000000001.s3.amazonaws.com",
+              "cors_rule": [],
+              "force_destroy": true,
+              "grant": [
+                {
+                  "id": "b9cf412bee08b69aa9f76584b19d74c72975c21976b0baa42ce6c79366c10955",
+                  "permissions": [
+                    "FULL_CONTROL"
+                  ],
+                  "type": "CanonicalUser",
+                  "uri": ""
+                }
+              ],
+              "hosted_zone_id": "Z3AQBSTGFYJSTF",
+              "id": "terraform-20230314154627317000000001",
+              "lifecycle_rule": [],
+              "logging": [],
+              "object_lock_configuration": [],
+              "object_lock_enabled": false,
+              "policy": "",
+              "region": "us-east-1",
+              "replication_configuration": [],
+              "request_payer": "BucketOwner",
+              "server_side_encryption_configuration": [
+                {
+                  "rule": [
+                    {
+                      "apply_server_side_encryption_by_default": [
+                        {
+                          "kms_master_key_id": "",
+                          "sse_algorithm": "AES256"
+                        }
+                      ],
+                      "bucket_key_enabled": false
+                    }
+                  ]
+                }
+              ],
+              "tags": null,
+              "tags_all": {},
+              "versioning": [
+                {
+                  "enabled": false,
+                  "mfa_delete": false
+                }
+              ],
+              "website": [],
+              "website_domain": null,
+              "website_endpoint": null
+            },
+            "sensitive_attributes": [],
+            "private": "bnVsbA=="
+          }
+        ]
+      },
+      {
+        "mode": "managed",
+        "type": "aws_s3_bucket",
+        "name": "public-read",
+        "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+        "instances": [
+          {
+            "schema_version": 0,
+            "attributes": {
+              "acceleration_status": "",
+              "acl": null,
+              "arn": "arn:aws:s3:::terraform-20230314154627318400000002",
+              "bucket": "terraform-20230314154627318400000002",
+              "bucket_domain_name": "terraform-20230314154627318400000002.s3.amazonaws.com",
+              "bucket_prefix": null,
+              "bucket_regional_domain_name": "terraform-20230314154627318400000002.s3.amazonaws.com",
+              "cors_rule": [],
+              "force_destroy": true,
+              "grant": [
+                {
+                  "id": "b9cf412bee08b69aa9f76584b19d74c72975c21976b0baa42ce6c79366c10955",
+                  "permissions": [
+                    "FULL_CONTROL"
+                  ],
+                  "type": "CanonicalUser",
+                  "uri": ""
+                }
+              ],
+              "hosted_zone_id": "Z3AQBSTGFYJSTF",
+              "id": "terraform-20230314154627318400000002",
+              "lifecycle_rule": [],
+              "logging": [],
+              "object_lock_configuration": [],
+              "object_lock_enabled": false,
+              "policy": "",
+              "region": "us-east-1",
+              "replication_configuration": [],
+              "request_payer": "BucketOwner",
+              "server_side_encryption_configuration": [
+                {
+                  "rule": [
+                    {
+                      "apply_server_side_encryption_by_default": [
+                        {
+                          "kms_master_key_id": "",
+                          "sse_algorithm": "AES256"
+                        }
+                      ],
+                      "bucket_key_enabled": false
+                    }
+                  ]
+                }
+              ],
+              "tags": null,
+              "tags_all": {},
+              "versioning": [
+                {
+                  "enabled": false,
+                  "mfa_delete": false
+                }
+              ],
+              "website": [],
+              "website_domain": null,
+              "website_endpoint": null
+            },
+            "sensitive_attributes": [],
+            "private": "bnVsbA=="
+          }
+        ]
+      },
+      {
+        "mode": "managed",
+        "type": "aws_s3_bucket_acl",
+        "name": "canonical",
+        "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+        "instances": [
+          {
+            "schema_version": 0,
+            "attributes": {
+              "access_control_policy": [
+                {
+                  "grant": [
+                    {
+                      "grantee": [
+                        {
+                          "display_name": "christof.dorner",
+                          "email_address": "",
+                          "id": "b9cf412bee08b69aa9f76584b19d74c72975c21976b0baa42ce6c79366c10955",
+                          "type": "CanonicalUser",
+                          "uri": ""
+                        }
+                      ],
+                      "permission": "READ"
+                    }
+                  ],
+                  "owner": [
+                    {
+                      "display_name": "christof.dorner",
+                      "id": "b9cf412bee08b69aa9f76584b19d74c72975c21976b0baa42ce6c79366c10955"
+                    }
+                  ]
+                }
+              ],
+              "acl": "",
+              "bucket": "terraform-20230314154627317000000001",
+              "expected_bucket_owner": "",
+              "id": "terraform-20230314154627317000000001"
+            },
+            "sensitive_attributes": [],
+            "private": "bnVsbA==",
+            "dependencies": [
+              "aws_s3_bucket.canonical",
+              "data.aws_canonical_user_id.current"
+            ]
+          }
+        ]
+      },
+      {
+        "mode": "managed",
+        "type": "aws_s3_bucket_acl",
+        "name": "public-read",
+        "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+        "instances": [
+          {
+            "schema_version": 0,
+            "attributes": {
+              "access_control_policy": [
+                {
+                  "grant": [
+                    {
+                      "grantee": [
+                        {
+                          "display_name": "",
+                          "email_address": "",
+                          "id": "",
+                          "type": "Group",
+                          "uri": "http://acs.amazonaws.com/groups/global/AllUsers"
+                        }
+                      ],
+                      "permission": "READ"
+                    },
+                    {
+                      "grantee": [
+                        {
+                          "display_name": "christof.dorner",
+                          "email_address": "",
+                          "id": "b9cf412bee08b69aa9f76584b19d74c72975c21976b0baa42ce6c79366c10955",
+                          "type": "CanonicalUser",
+                          "uri": ""
+                        }
+                      ],
+                      "permission": "FULL_CONTROL"
+                    }
+                  ],
+                  "owner": [
+                    {
+                      "display_name": "christof.dorner",
+                      "id": "b9cf412bee08b69aa9f76584b19d74c72975c21976b0baa42ce6c79366c10955"
+                    }
+                  ]
+                }
+              ],
+              "acl": "public-read",
+              "bucket": "terraform-20230314154627318400000002",
+              "expected_bucket_owner": "",
+              "id": "terraform-20230314154627318400000002,public-read"
+            },
+            "sensitive_attributes": [],
+            "private": "bnVsbA==",
+            "dependencies": [
+              "aws_s3_bucket.public-read"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+  
