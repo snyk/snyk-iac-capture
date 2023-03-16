@@ -1,0 +1,21 @@
+{
+  "version": 4,
+  "terraform_version": "0.12.26",
+  "lineage": "b4b284a7-9835-6ae1-b6c5-21100080f61e",
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_iam_role_policy_attachment",
+      "name": "test-attach1",
+      "instances": [
+        {
+          "attributes": {
+            "id": "test-role-20201118162849968800000001",
+            "policy_arn": "arn:aws:iam::526954929923:policy/test-policy",
+            "role": "test-role"
+          }
+        }
+      ]
+    }
+  ]
+}

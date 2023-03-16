@@ -50,6 +50,24 @@ func TestFilter(t *testing.T) {
 			resultJsonFile: "aws_s3_bucket_acl-filtered.json",
 			wantErr:        false,
 		},
+		{
+			name:           "Filter a state with IAM group policy attachment",
+			stateFile:      "aws_iam_group_policy_attachment.json",
+			resultJsonFile: "aws_iam_group_policy_attachment-filtered.json",
+			wantErr:        false,
+		},
+		{
+			name:           "Filter a state with IAM role policy attachment",
+			stateFile:      "aws_iam_role_policy_attachment.json",
+			resultJsonFile: "aws_iam_role_policy_attachment-filtered.json",
+			wantErr:        false,
+		},
+		{
+			name:           "Filter a state with IAM user policy attachment",
+			stateFile:      "aws_iam_user_policy_attachment.json",
+			resultJsonFile: "aws_iam_user_policy_attachment-filtered.json",
+			wantErr:        false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {

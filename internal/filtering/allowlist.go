@@ -19,8 +19,11 @@ package filtering
 type ResourceAllowlist map[string][]string
 
 var globalAllowlist = ResourceAllowlist{
-	"aws_security_group_rule": []string{"security_group_id"},
-	"aws_s3_bucket_acl":       []string{"bucket"},
+	"aws_iam_group_policy_attachment": []string{"policy_arn", "group"},
+	"aws_iam_role_policy_attachment":  []string{"policy_arn", "role"},
+	"aws_iam_user_policy_attachment":  []string{"policy_arn", "user"},
+	"aws_s3_bucket_acl":               []string{"bucket"},
+	"aws_security_group_rule":         []string{"security_group_id"},
 }
 
 func (a ResourceAllowlist) GetAllowedAttributes(ty string) []string {
