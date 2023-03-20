@@ -1,0 +1,30 @@
+{
+  "version": 4,
+  "terraform_version": "0.12.26",
+  "lineage": "b4b284a7-9835-6ae1-b6c5-21100080f61e",
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_iam_policy_attachment",
+      "name": "test-attach",
+      "instances": [
+        {
+          "attributes": {
+            "groups": [
+              "test-group"
+            ],
+            "id": "test-attachment",
+            "policy_arn": "arn:aws:iam::929327065333:policy/test-policy",
+            "roles": [
+              "test_role"
+            ],
+            "users": [
+              "test",
+              "test2"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

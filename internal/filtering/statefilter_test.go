@@ -68,6 +68,12 @@ func TestFilter(t *testing.T) {
 			resultJsonFile: "aws_iam_user_policy_attachment-filtered.json",
 			wantErr:        false,
 		},
+		{
+			name:           "Filter a state with IAM policy attachment",
+			stateFile:      "aws_iam_policy_attachment.json",
+			resultJsonFile: "aws_iam_policy_attachment-filtered.json",
+			wantErr:        false,
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
