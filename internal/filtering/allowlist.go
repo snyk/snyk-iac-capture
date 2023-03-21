@@ -20,6 +20,7 @@ type ResourceAllowlist map[string][]string
 
 var globalAllowlist = ResourceAllowlist{
 	"aws_iam_group_policy_attachment": []string{"policy_arn", "group"},
+	"aws_iam_policy_attachment":       []string{"policy_arn", "users", "groups", "roles"},
 	"aws_iam_role_policy_attachment":  []string{"policy_arn", "role"},
 	"aws_iam_user_policy_attachment":  []string{"policy_arn", "user"},
 	"aws_s3_bucket_acl":               []string{"bucket"},

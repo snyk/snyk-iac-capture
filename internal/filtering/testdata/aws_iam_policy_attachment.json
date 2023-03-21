@@ -1,0 +1,44 @@
+{
+  "version": 4,
+  "terraform_version": "0.12.26",
+  "serial": 591,
+  "lineage": "b4b284a7-9835-6ae1-b6c5-21100080f61e",
+  "outputs": {},
+  "resources": [
+    {
+      "mode": "managed",
+      "type": "aws_iam_policy_attachment",
+      "name": "test-attach",
+      "provider": "provider[\"registry.terraform.io/hashicorp/aws\"]",
+      "instances": [
+        {
+          "schema_version": 0,
+          "attributes": {
+            "groups": [
+              "test-group"
+            ],
+            "id": "test-attachment",
+            "name": "test-attachment",
+            "policy_arn": "arn:aws:iam::929327065333:policy/test-policy",
+            "roles": [
+              "test_role"
+            ],
+            "users": [
+              "test",
+              "test2"
+            ]
+          },
+          "sensitive_attributes": [],
+          "private": "bnVsbA==",
+          "dependencies": [
+            "aws_iam_group.group",
+            "aws_iam_policy.policy",
+            "aws_iam_role.role",
+            "aws_iam_user.user",
+            "aws_iam_user.user2"
+          ]
+        }
+      ]
+    }
+  ]
+}
