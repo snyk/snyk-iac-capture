@@ -26,8 +26,3 @@ changelog:
   filters:
     exclude:
       - '^Merge pull request'
-blobs:
-  - provider: s3
-    bucket: snyk-assets
-    region: us-east-1
-    folder: "cli/iac/capture/{{.Tag}}"

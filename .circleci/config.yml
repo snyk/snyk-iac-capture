@@ -172,19 +172,14 @@ workflows:
       - snyk-code:
           name: Snyk Code
           context: snyk-iac-capture
-      - hold:
-          name: Approve release
-          type: approval
-          requires:
-            - Tidy
-            - Format
-            - Build
-            - Test
-            - Lint
-            - Snyk Open Source
-            - Snyk Code
       - release:
           name: Release
           context: snyk-iac-capture
           requires:
-            - Approve release
+              - Tidy
+              - Format
+              - Build
+              - Test
+              - Lint
+              - Snyk Open Source
+              - Snyk Code
