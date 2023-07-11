@@ -1,6 +1,7 @@
 version: 2.1
 
 orbs:
+  prodsec: snyk/prodsec-orb@1.0
   snyk: snyk/snyk@1.4.0
 
 executors:
@@ -126,6 +127,11 @@ workflows:
     unless:
       equal: [ <<pipeline.git.branch>>, main ]
     jobs:
+      - prodsec/secrets-scan:
+          name: Scan repository for secrets
+          context:
+            - snyk-bot-slack
+          channel: group-infrastructure-as-code-alerts
       - tidy:
           name: Tidy
           context: snyk-iac-capture
