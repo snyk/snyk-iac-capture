@@ -3,20 +3,17 @@
 apiVersion: backstage.io/v1alpha1
 kind: Component
 metadata:
-    name: snyk-iac-capture
-    annotations:
-        github.com/project-slug: snyk/snyk-iac-capture
-        circleci.com/project-slug: github/snyk/snyk-iac-capture
-    description: <
-        A Golang CLI that sends state artifact to Snyk's Cloud API to find mappings between Cloud and IaC resources.
-    labels:
-        snyk.io/businessCriticality: medium
-        snyk.io/visibility: private
-        snyk.io/metadata-version: "2022-23-01"
+  name: snyk-iac-capture
+  annotations:
+    github.com/project-slug: snyk/snyk-iac-capture
+    circleci.com/project-slug: github/snyk/snyk-iac-capture
+    github.com/team-slug: snyk/cloud-dev-ex
+  description: < A Golang CLI that sends state artifact to Snyk's Cloud API to find mappings between Cloud and IaC resources.
+  labels:
+    snyk.io/businessCriticality: medium
+    snyk.io/visibility: private
+    snyk.io/metadata-version: "2022-23-01"
 spec:
-    # Currently type only accepts one of, website, service, library and we've aligned
-    # internally on "service" for CLI tools.
-    # See: https://backstage.io/docs/features/software-catalog/descriptor-format#spectype-required
-    type: service
-    lifecycle: production
-    owner: "cloud-context"
+  type: snyk-cli-plugin
+  lifecycle: "-"
+  owner: cloud-dev-ex
