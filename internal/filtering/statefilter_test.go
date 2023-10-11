@@ -39,6 +39,12 @@ func TestFilter(t *testing.T) {
 			wantErr:        false,
 		},
 		{
+			name:           "Filter a valid but empty state",
+			stateFile:      "empty.json",
+			resultJsonFile: "empty-filtered.json",
+			wantErr:        false,
+		},
+		{
 			name:           "Filter a state with security group rules",
 			stateFile:      "aws_security_group_rule.json",
 			resultJsonFile: "aws_security_group_rule-filtered.json",

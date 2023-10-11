@@ -25,6 +25,7 @@ func FilterState(state *terraform.State) (*terraform.State, error) {
 		Version:          state.Version,
 		TerraformVersion: state.TerraformVersion,
 		Lineage:          state.Lineage,
+		Resources:        []terraform.Resource{},
 	}
 
 	for _, resource := range state.Resources {
