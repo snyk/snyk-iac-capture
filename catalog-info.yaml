@@ -7,7 +7,7 @@ metadata:
   annotations:
     github.com/project-slug: snyk/snyk-iac-capture
     circleci.com/project-slug: github/snyk/snyk-iac-capture
-    github.com/team-slug: snyk/cloud-dev-ex
+    github.com/team-slug: snyk/iac
   description: < A Golang CLI that sends state artifact to Snyk's Cloud API to find mappings between Cloud and IaC resources.
   labels:
     snyk.io/businessCriticality: medium
@@ -16,4 +16,4 @@ metadata:
 spec:
   type: snyk-cli-plugin
   lifecycle: "-"
-  owner: cloud-dev-ex
+  owner: iac
