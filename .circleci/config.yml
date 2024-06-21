@@ -118,7 +118,7 @@ workflows:
       - security-scans:
           name: Security Scans
           context:
-            - prodsec-snyk
+            - analysis-iac
       - tidy:
           name: Tidy
           context: snyk-iac-capture
