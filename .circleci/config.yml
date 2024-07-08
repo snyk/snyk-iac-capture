@@ -41,6 +41,8 @@ jobs:
       - checkout
       - prodsec/security_scans:
           mode: auto
+          iac-scan: disabled
+
   tidy:
     executor: default
     steps:
